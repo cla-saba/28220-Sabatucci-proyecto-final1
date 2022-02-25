@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Products = require('../classes/Products')
+const fs = require('fs');
+const Products = require('../classes/Products');
+const Product = new Products();
 
 const isAdmin = true;
-// const isAdmin = false;
 
 const checkAuthorization = (req, res, next) => {
   if (!isAdmin) {
@@ -15,8 +16,6 @@ const checkAuthorization = (req, res, next) => {
   }
   next();
 }
-
-const Product = new Products();
 
 // Me permite listar todos los productos disponibles -- (usuarios y administradores)
 router.get('/', (req, res) => {

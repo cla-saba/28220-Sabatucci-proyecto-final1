@@ -1,11 +1,25 @@
+const fs = require('fs');
+
 class Products {
   constructor() {
     this.products = []
     this.id = 0
+    this.file = '../data/productos.txt';
   };
 
-  listById(id) {
-    const product = this.products.find(product => product.id == id);
+  async readFile() {
+    const content = await fs.promises.readFile(this.file, 'utf-8');
+    console.log('Registro leido');
+    return JSON.parse(content);
+  }
+
+  async writeFile(parsedFile) {
+    await fs.promises.writeFile(this.file, JSON.stringify(parsedFile, null, 2));
+  }
+
+  async listById(id) {
+    const parsedFile = await this.readFile();
+    const product = parsedFile.find(product => product.id == id);
     if (product) {
       return product;
     } else {
@@ -13,13 +27,15 @@ class Products {
     }
   };
 
-  listAll() {
-    return [...this.products];
+  async listAll() {
+    return await this.readFile();
   };
 
-  addProduct(product) {
+  async addProduct(product) {
     const newProduct = { ...product, id: ++this.id, timestamp: Date.now() };
-    this.products.push(newProduct);
+    let parsedFile = await this.readFile();
+    parsedFile.push(newRecord);
+    await this.writeFile(parsedFile);
     return newProduct;
   };
 

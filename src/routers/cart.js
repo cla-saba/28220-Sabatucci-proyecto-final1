@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const Cart = require('../classes/Cart')
+const Carts = require('../classes/Carts');
+const Cart = new Carts();
 
 // Crea un carrito y devuelve su id -- (usuarios y administradores)
 router.post('/', (req, res) => {
-  res.send('POST');
+  const newCart = Cart.addCart(req.body);
+  res.status(201).json(newCart)
+  // res.send('POST');
 });
 
 // Vacia un carrito y lo elimina -- (usuarios y administradores)
